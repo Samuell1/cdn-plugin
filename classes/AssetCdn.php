@@ -14,6 +14,8 @@ class AssetCdn
      */
     public static function assetCdn($path): string
     {
+        $path = config('cdn.assetsFolder', '/assets/').$path;
+
         // If cdn is disabled return url from local active theme.
         if (!config('cdn.active')) {
             return (new Controller)->themeUrl($path);
