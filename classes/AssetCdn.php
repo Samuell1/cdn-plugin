@@ -1,5 +1,8 @@
 <?php namespace Samuell\Cdn\Classes;
 
+use Cms\Classes\Theme;
+use Cms\Classes\Controller;
+
 class AssetCdn
 {
 
@@ -9,13 +12,13 @@ class AssetCdn
      * @param  string  $path
      * @return string
      */
-    public function assetCdn($path): string
+    public static function assetCdn($path): string
     {
-        if (!config('cdn.use_cdn')) {
-            $theme = themes_path();
-            return asset($theme.$path);
+        // If cdn is disabled return url from local active theme.
+        if (!config('cdn.active')) {
+            return (new Controller)->themeUrl($path);
         }
-        $cdnUrl = config('cdn.cdn_url');
+        $cdnUrl = config('cdn.url');
 
         // Remove slashes from ending of the path
         $cdnUrl = rtrim($cdnUrl, '/');

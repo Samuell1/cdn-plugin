@@ -2,6 +2,7 @@
 
 use Backend;
 use System\Classes\PluginBase;
+use Samuell\Cdn\Classes\AssetCdn;
 
 /**
  * Cdn Plugin Information File
@@ -44,63 +45,19 @@ class Plugin extends PluginBase
 
     }
 
+    /**
+     * Boot method, called right before the request route.
+     *
+     * @return array
+     */
     public function registerMarkupTags()
     {
         return [
             'functions' => [
-                'asset_cdn' => ['Samuell\Cdn\Classes\AssetCdn', 'assetCdn'],
+                'asset_cdn' => function ($path) {
+                    return AssetCdn::assetCdn($path);
+                },
             ]
-        ];
-    }
-
-    /**
-     * Registers any front-end components implemented in this plugin.
-     *
-     * @return array
-     */
-    public function registerComponents()
-    {
-        return []; // Remove this line to activate
-
-        return [
-            'Samuell\Cdn\Components\MyComponent' => 'myComponent',
-        ];
-    }
-
-    /**
-     * Registers any back-end permissions used by this plugin.
-     *
-     * @return array
-     */
-    public function registerPermissions()
-    {
-        return []; // Remove this line to activate
-
-        return [
-            'samuell.cdn.some_permission' => [
-                'tab' => 'Cdn',
-                'label' => 'Some permission'
-            ],
-        ];
-    }
-
-    /**
-     * Registers back-end navigation items for this plugin.
-     *
-     * @return array
-     */
-    public function registerNavigation()
-    {
-        return []; // Remove this line to activate
-
-        return [
-            'cdn' => [
-                'label'       => 'Cdn',
-                'url'         => Backend::url('samuell/cdn/mycontroller'),
-                'icon'        => 'icon-leaf',
-                'permissions' => ['samuell.cdn.*'],
-                'order'       => 500,
-            ],
         ];
     }
 }
