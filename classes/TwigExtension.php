@@ -1,9 +1,8 @@
 <?php namespace Samuell\Cdn\Classes;
 
-use Cms\Classes\Theme;
 use Cms\Classes\Controller;
 
-class AssetCdn
+class TwigExtension
 {
 
     /**
@@ -20,6 +19,23 @@ class AssetCdn
         if (!config('cdn.active')) {
             return (new Controller)->themeUrl($path);
         }
+        $cdnUrl = config('cdn.url');
+
+        // Remove slashes from ending of the path
+        $cdnUrl = rtrim($cdnUrl, '/');
+        return $cdnUrl . '/' . trim($path, '/');
+    }
+
+    /**
+     * Get path for cdn.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public static function cdn($path): string
+    {
+        $path = $path;
+
         $cdnUrl = config('cdn.url');
 
         // Remove slashes from ending of the path

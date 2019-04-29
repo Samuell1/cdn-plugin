@@ -2,7 +2,7 @@
 
 use Backend;
 use System\Classes\PluginBase;
-use Samuell\Cdn\Classes\AssetCdn;
+use Samuell\Cdn\Classes\TwigExtension;
 
 /**
  * Cdn Plugin Information File
@@ -55,7 +55,10 @@ class Plugin extends PluginBase
         return [
             'functions' => [
                 'asset_cdn' => function ($path) {
-                    return AssetCdn::assetCdn($path);
+                    return TwigExtension::assetCdn($path);
+                },
+                'cdn' => function ($path) {
+                    return TwigExtension::cdn($path);
                 },
             ]
         ];
