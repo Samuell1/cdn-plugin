@@ -23,13 +23,28 @@ class Clear extends Command
      */
     public function handle()
     {
-        $directory = config('cdn.assetsFolder');
-        $storage = Storage::disk(config('cdn.filesystem.disk'));
+        $filesystemManager = Storage::disk(config('cdn.filesystem.disk'));
+        
+        $filesOnCdn = $filesystemManager->allFiles();
+        
+        if (!$filesOnCdn) {
+            return $this->error('CDN storage is already empty.');
+        }
 
-        $storage->deleteDirectory($directory);
-        $storage->makeDirectory($directory);
+        $bar = $this->output->createProgressBar(count($filesOnCdn));
+        $bar->setFormat(
+            "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
+        );
 
-        $this->info('CDN folder cleared!');
+        if ($filesystemManager->delete($filesOnCdn)) {
+            foreach ($filesOnCdn as $file) {
+                $bar->setMessage($file, 'current_step');
+                $bar->advance();
+            }
+        }
+
+        $bar->finish();
+        $this->info('CDN storage cleared!');
     }
 
     /**
