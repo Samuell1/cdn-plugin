@@ -7,6 +7,7 @@ use Cms\Classes\Theme;
 use Illuminate\Http\File as FileIlluminate;
 use October\Rain\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Finder\SplFileInfo;
 
 class Sync extends Command
 {
@@ -20,6 +21,8 @@ class Sync extends Command
      */
     protected $description = 'Synchronizes assets to CDN';
 
+    private $filesystemManager;
+
     /**
      * Execute the console command.
      * @return void
@@ -28,10 +31,14 @@ class Sync extends Command
     {
         $this->filesystem = config('cdn.filesystem.disk');
         $this->assetsFolder = config('cdn.assetsFolder');
+        $this->filesystemManager = Storage::disk($this->filesystem);
 
         $assetsThemePath = (new Theme)->getPath($this->argument('theme')).$this->assetsFolder;
 
+        $filesOnCdn = $this->filesystemManager->allFiles($this->assetsFolder);
         $localFiles = File::allFiles($assetsThemePath);
+        $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
+        $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
         $bar = $this->output->createProgressBar(count($localFiles));
         $bar->setFormat(
@@ -42,7 +49,7 @@ class Sync extends Command
 
             $bar->setMessage($file->getRelativePathname(), 'current_step');
 
-            $fileUploaded = Storage::disk($this->filesystem)
+            $fileUploaded = $this->filesystemManager
                 ->putFileAs(
                     $this->assetsFolder.$file->getRelativePath(),
                     new FileIlluminate($file->getRealPath()),
@@ -80,5 +87,57 @@ class Sync extends Command
     protected function getOptions()
     {
         return [];
+    }
+
+    /**
+     * @param string[] $filesOnCdn
+     * @param SplFileInfo[] $localFiles
+     * @return SplFileInfo[]
+     */
+    private function filesToSync(array $filesOnCdn, array $localFiles): array
+    {
+        $array = array_filter($localFiles, function (SplFileInfo $localFile) use ($filesOnCdn) {
+            $localFilePathname = $localFile->getRelativePathname();
+            if (! in_array($localFilePathname, $filesOnCdn)) {
+                return true;
+            }
+            $filesizeOfCdn = $this->filesystemManager
+                ->disk($this->filesystem)
+                ->size($localFilePathname);
+            if ($filesizeOfCdn != $localFile->getSize()) {
+                return true;
+            }
+            $md5OfCdn = md5(
+                $this->filesystemManager
+                    ->disk($this->filesystem)
+                    ->get($localFilePathname)
+            );
+            $md5OfLocal = md5_file($localFile->getRealPath());
+            if ($md5OfLocal != $md5OfCdn) {
+                return true;
+            }
+            return false;
+        });
+        return array_values($array);
+    }
+    /**
+     * @param string[] $filesOnCdn
+     * @param SplFileInfo[] $localFiles
+     * @return string[]
+     */
+    private function filesToDelete(array $filesOnCdn, array $localFiles): array
+    {
+        $localFiles = $this->mapToPathname($localFiles);
+        $array = array_filter($filesOnCdn, function (string $fileOnCdn) use ($localFiles) {
+            return ! in_array($fileOnCdn, $localFiles);
+        });
+        return array_values($array);
+    }
+
+    protected function mapToPathname(array $files): array
+    {
+        return array_map(function (SplFileInfo $file) {
+            return $file->getRelativePathname();
+        }, $files);
     }
 }
