@@ -33,7 +33,7 @@ class Sync extends Command
         $this->assetsFolder = config('cdn.assetsFolder');
         $this->filesystemManager = Storage::disk($this->filesystem);
 
-        $assetsThemePath = (new Theme)->getPath($this->argument('theme')).$this->assetsFolder;
+        $assetsThemePath = (new Theme)->getPath($this->argument('theme')) . $this->assetsFolder;
 
         $filesOnCdn = $this->filesystemManager->allFiles($this->assetsFolder);
         $localFiles = File::allFiles($assetsThemePath);
@@ -45,13 +45,13 @@ class Sync extends Command
             "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
         );
 
-        foreach ($localFiles as $file) {
+        foreach ($filesToSync as $file) {
 
             $bar->setMessage($file->getRelativePathname(), 'current_step');
 
             $fileUploaded = $this->filesystemManager
                 ->putFileAs(
-                    $this->assetsFolder.$file->getRelativePath(),
+                    $this->assetsFolder . $file->getRelativePath(),
                     new FileIlluminate($file->getRealPath()),
                     $file->getFilename(),
                     config('cdn.filesystem.options')
@@ -98,7 +98,7 @@ class Sync extends Command
     {
         $array = array_filter($localFiles, function (SplFileInfo $localFile) use ($filesOnCdn) {
             $localFilePathname = $localFile->getRelativePathname();
-            if (! in_array($localFilePathname, $filesOnCdn)) {
+            if (!in_array($localFilePathname, $filesOnCdn)) {
                 return true;
             }
             $filesizeOfCdn = $this->filesystemManager
@@ -129,7 +129,7 @@ class Sync extends Command
     {
         $localFiles = $this->mapToPathname($localFiles);
         $array = array_filter($filesOnCdn, function (string $fileOnCdn) use ($localFiles) {
-            return ! in_array($fileOnCdn, $localFiles);
+            return !in_array($fileOnCdn, $localFiles);
         });
         return array_values($array);
     }
