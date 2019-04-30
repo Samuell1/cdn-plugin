@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Facades\Storage;
 
 class Clear extends Command
 {
@@ -14,7 +15,7 @@ class Clear extends Command
     /**
      * @var string The console command description.
      */
-    protected $description = 'No description provided yet...';
+    protected $description = 'Deletes assets on CDN';
 
     /**
      * Execute the console command.
@@ -22,7 +23,13 @@ class Clear extends Command
      */
     public function handle()
     {
-        $this->output->writeln('Hello world!');
+        $directory = config('cdn.assetsFolder');
+        $storage = Storage::disk(config('cdn.filesystem.disk'));
+
+        $storage->deleteDirectory($directory);
+        $storage->makeDirectory($directory);
+
+        $this->info('CDN folder cleared!');
     }
 
     /**

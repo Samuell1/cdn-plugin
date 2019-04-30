@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Facades\Storage;
 
 class Push extends Command
 {
@@ -14,7 +15,7 @@ class Push extends Command
     /**
      * @var string The console command description.
      */
-    protected $description = 'No description provided yet...';
+    protected $description = 'Push assets on CDN';
 
     /**
      * Execute the console command.
@@ -22,7 +23,7 @@ class Push extends Command
      */
     public function handle()
     {
-        $this->output->writeln('Hello world!');
+
     }
 
     /**

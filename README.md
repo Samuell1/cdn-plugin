@@ -20,7 +20,7 @@ php artisan cdn:sync
 Pushes assets but does not delete files on CDN.
 
 ```
-php artisan cdn:sync
+php artisan cdn:push
 ```
 
 #### Delete all assets from CDN
