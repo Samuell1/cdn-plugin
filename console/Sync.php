@@ -35,12 +35,12 @@ class Sync extends Command
 
         $assetsThemePath = (new Theme)->getPath($this->argument('theme')) . $this->assetsFolder;
 
-        $filesOnCdn = $this->filesystemManager->allFiles($this->assetsFolder);
+        $filesOnCdn = $this->filesystemManager->allFiles();
         $localFiles = File::allFiles($assetsThemePath);
         $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
         $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
-        $bar = $this->output->createProgressBar(count($localFiles));
+        $bar = $this->output->createProgressBar(count($filesToSync));
         $bar->setFormat(
             "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
         );
@@ -51,7 +51,7 @@ class Sync extends Command
 
             $fileUploaded = $this->filesystemManager
                 ->putFileAs(
-                    $this->assetsFolder . $file->getRelativePath(),
+                    $file->getRelativePath(),
                     new FileIlluminate($file->getRealPath()),
                     $file->getFilename(),
                     config('cdn.filesystem.options')
@@ -67,6 +67,15 @@ class Sync extends Command
         $bar->finish();
 
         $this->info('Files succesfuly uploaded!');
+
+        if ($this->filesystemManager
+            ->disk($this->filesystem)
+            ->delete($filesToDelete)) {
+            foreach ($filesToDelete as $file) {
+                $this->info("Successfully deleted: {$file}");
+            }
+        }
+
     }
 
     /**
