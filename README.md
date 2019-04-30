@@ -6,6 +6,32 @@ Sync theme assets with CDN.
 
 ### Config
 
+**config/filesystems.php**
+```
+'asset-cdn' => [
+    'driver' => 'local',
+    // 'key'    => env('S3_KEY'),
+    // 'secret' => env('S3_SECRET'),
+    // 'region' => env('S3_REGION'),
+    // 'bucket' => env('S3_BUCKET'),
+    'root'   => 'assets/', // specifi folder for asset files
+],
+```
+
+**config/cdn.php**
+```
+return [
+  'active' => false,
+  'cdnUrl' => 'https://cdn.mydomain.com/',
+  'assetsFolder' => '/assets/',
+
+  'filesystem' => [
+    'disk' => 'asset-cdn',
+    'options' => []
+  ]
+];
+```
+
 
 ### Commands
 
