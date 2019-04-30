@@ -10,10 +10,10 @@ Sync theme assets with CDN.
 ```
 'asset-cdn' => [
     'driver' => 'local',
-    // 'key'    => env('S3_KEY'),
-    // 'secret' => env('S3_SECRET'),
-    // 'region' => env('S3_REGION'),
-    // 'bucket' => env('S3_BUCKET'),
+    'key'    => env('S3_KEY'),
+    'secret' => env('S3_SECRET'),
+    'region' => env('S3_REGION'),
+    'bucket' => env('S3_BUCKET'),
     'root'   => 'assets/', // specifi folder for asset files
 ],
 ```
