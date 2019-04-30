@@ -69,7 +69,6 @@ class Sync extends Command
         $this->info('Files succesfuly uploaded!');
 
         if ($this->filesystemManager
-            ->disk($this->filesystem)
             ->delete($filesToDelete)) {
             foreach ($filesToDelete as $file) {
                 $this->info("Successfully deleted: {$file}");
@@ -111,14 +110,12 @@ class Sync extends Command
                 return true;
             }
             $filesizeOfCdn = $this->filesystemManager
-                ->disk($this->filesystem)
                 ->size($localFilePathname);
             if ($filesizeOfCdn != $localFile->getSize()) {
                 return true;
             }
             $md5OfCdn = md5(
                 $this->filesystemManager
-                    ->disk($this->filesystem)
                     ->get($localFilePathname)
             );
             $md5OfLocal = md5_file($localFile->getRealPath());
