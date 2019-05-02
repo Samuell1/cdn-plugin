@@ -55,10 +55,10 @@ class Plugin extends PluginBase
         return [
             'functions' => [
                 'asset_cdn' => function ($path) {
-                    return TwigExtension::assetCdn($path);
+                    return (new TwigExtension)->assetCdn($path);
                 },
                 'cdn' => function ($path) {
-                    return TwigExtension::cdn($path);
+                    return (new TwigExtension)->cdn($path);
                 },
             ]
         ];

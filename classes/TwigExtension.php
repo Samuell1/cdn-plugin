@@ -14,16 +14,14 @@ class TwigExtension
      * @param  boolean $useManifest
      * @return string
      */
-    public static function assetCdn($path, $useManifest = true): string
+    public function assetCdn($path, $useManifest = true): string
     {
         // Use manifest to determine path
         if (config('cdn.useManifest') && $useManifest) {
-            $outputPath = (new self)->readManifest(basename($path));
+            $outputPath = $this->readManifest(basename($path));
         } else {
             // If cdn is disabled return url from local active theme
-            if (!config('cdn.active')) {
-                return (new Controller)->themeUrl($path);
-            }
+            $this->useThemeUrl($path);
 
             $cdnUrl = rtrim(config('cdn.url'), '/');
             $outputPath = $cdnUrl . '/' . trim($path, '/');
@@ -38,12 +36,10 @@ class TwigExtension
      * @param  string  $path
      * @return string
      */
-    public static function cdn($path): string
+    public function cdn($path): string
     {
         // If cdn is disabled return url from local active theme
-        if (!config('cdn.active')) {
-            return (new Controller)->themeUrl($path);
-        }
+        $this->useThemeUrl($path);
 
         // Remove slashes from ending of the path
         $cdnUrl = rtrim(config('cdn.url'), '/');
@@ -59,5 +55,12 @@ class TwigExtension
         });
 
         return $manifest->$path;
+    }
+
+    private function useThemeUrl($path)
+    {
+        if (!config('cdn.active')) {
+            return (new Controller)->themeUrl($path);
+        }
     }
 }
