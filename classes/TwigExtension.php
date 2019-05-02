@@ -1,6 +1,8 @@
 <?php namespace Samuell\Cdn\Classes;
 
 use Cms\Classes\Controller;
+use Cms\Classes\Theme;
+use Cache;
 
 class TwigExtension
 {
@@ -9,21 +11,25 @@ class TwigExtension
      * Get asset path for cdn.
      *
      * @param  string  $path
+     * @param  boolean $useManifest
      * @return string
      */
-    public static function assetCdn($path): string
+    public static function assetCdn($path, $useManifest = true): string
     {
-        $path = config('cdn.assetsFolder', '/assets/').$path;
-
-        // If cdn is disabled return url from local active theme.
+        // If cdn is disabled return url from local active theme
         if (!config('cdn.active')) {
             return (new Controller)->themeUrl($path);
         }
-        $cdnUrl = config('cdn.url');
 
-        // Remove slashes from ending of the path
-        $cdnUrl = rtrim($cdnUrl, '/');
-        return $cdnUrl . '/' . trim($path, '/');
+        // Use manifest to determine path
+        if (config('cdn.useManifest') && $useManifest) {
+            $outputPath = (new self)->readManifest(basename($path));
+        } else {
+            $cdnUrl = rtrim(config('cdn.url'), '/');
+            $outputPath = $cdnUrl . '/' . trim($path, '/');
+        }
+
+        return $outputPath;
     }
 
     /**
@@ -34,12 +40,23 @@ class TwigExtension
      */
     public static function cdn($path): string
     {
-        $path = $path;
-
-        $cdnUrl = config('cdn.url');
+        // If cdn is disabled return url from local active theme
+        if (!config('cdn.active')) {
+            return (new Controller)->themeUrl($path);
+        }
 
         // Remove slashes from ending of the path
-        $cdnUrl = rtrim($cdnUrl, '/');
+        $cdnUrl = rtrim(config('cdn.url'), '/');
         return $cdnUrl . '/' . trim($path, '/');
+    }
+
+    private function readManifest($path)
+    {
+        $manifest = Cache::rememberForever('cdn:manifest', function () {
+            $themePath = Theme::getActiveTheme()->getPath();
+            return json_decode(file_get_contents($themePath . config('cdn.manifestPath')));
+        });
+
+        return $manifest->$path;
     }
 }
