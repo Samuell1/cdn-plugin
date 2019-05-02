@@ -25,6 +25,10 @@ return [
   'cdnUrl' => 'https://cdn.mydomain.com/',
   'assetsFolder' => '/assets/',
 
+  // webpack, laravel mix integration
+  'useManifest' => true,
+  'manifestPath' => '/assets/compiled/manifest.json',
+
   'filesystem' => [
     'disk' => 'asset-cdn',
     'options' => []
