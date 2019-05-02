@@ -47,6 +47,7 @@ class TwigExtension
 
         // Remove slashes from ending of the path
         $cdnUrl = rtrim(config('cdn.url'), '/');
+
         return $cdnUrl . '/' . trim($path, '/');
     }
 

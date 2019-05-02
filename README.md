@@ -22,7 +22,7 @@ Sync theme assets with CDN.
 ```
 return [
   'active' => false,
-  'cdnUrl' => 'https://cdn.mydomain.com/',
+  'url' => 'https://cdn.mydomain.com/',
   'assetsFolder' => '/assets/',
 
   // webpack, laravel mix integration
