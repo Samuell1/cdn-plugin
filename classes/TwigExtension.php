@@ -21,7 +21,9 @@ class TwigExtension
             $outputPath = $this->readManifest(basename($path));
         } else {
             // If cdn is disabled return url from local active theme
-            $this->useThemeUrl($path);
+            if (!config('cdn.active')) {
+                return (new Controller)->themeUrl($path);
+            }
 
             $cdnUrl = rtrim(config('cdn.url'), '/');
             $outputPath = $cdnUrl . '/' . trim($path, '/');
@@ -39,7 +41,9 @@ class TwigExtension
     public function cdn($path): string
     {
         // If cdn is disabled return url from local active theme
-        $this->useThemeUrl($path);
+        if (!config('cdn.active')) {
+            return (new Controller)->themeUrl($path);
+        }
 
         // Remove slashes from ending of the path
         $cdnUrl = rtrim(config('cdn.url'), '/');
@@ -55,12 +59,5 @@ class TwigExtension
         });
 
         return $manifest->$path;
-    }
-
-    private function useThemeUrl($path)
-    {
-        if (!config('cdn.active')) {
-            return (new Controller)->themeUrl($path);
-        }
     }
 }
