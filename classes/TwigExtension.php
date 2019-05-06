@@ -3,6 +3,7 @@
 use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Cache;
+use SystemException;
 
 class TwigExtension
 {
