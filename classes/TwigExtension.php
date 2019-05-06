@@ -55,7 +55,12 @@ class TwigExtension
     {
         $manifest = Cache::rememberForever('cdn:manifest', function () {
             $themePath = Theme::getActiveTheme()->getPath();
-            return json_decode(file_get_contents($themePath . config('cdn.manifestPath')));
+            $manifestPath = $themePath . config('cdn.manifestPath');
+            if (file_exists($manifestPath)) {
+                return json_decode(file_get_contents($manifestPath));
+            } else {
+                throw new SystemException('Missing manifest.json file');
+            }
         });
 
         return $manifest->$path;
