@@ -143,7 +143,7 @@ class Sync extends Command
     protected function mapToPathname(array $files): array
     {
         return array_map(function (SplFileInfo $file) {
-            return $file->getRelativePathname();
+            return str_replace('\\', '/', $file->getRelativePathname());
         }, $files);
     }
 }
