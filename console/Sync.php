@@ -40,6 +40,10 @@ class Sync extends Command
         $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
         $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
+        if (!$filesToSync) {
+            return $this->info('Files on CDN are equal to local files.');
+        }
+
         $bar = $this->output->createProgressBar(count($filesToSync));
         $bar->setFormat(
             "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
@@ -65,14 +69,27 @@ class Sync extends Command
         }
 
         $bar->finish();
+        $this->info('Files succesfuly uploaded to CDN!');
 
-        $this->info('Files succesfuly uploaded!');
 
-        if ($this->filesystemManager
+        // Delete old files
+        if ($filesToDelete && $this->filesystemManager
             ->delete($filesToDelete)) {
+
+            $this->info('Deleting old files');
+
+            $barDeleted = $this->output->createProgressBar(count($filesToDelete));
+            $barDeleted->setFormat(
+                "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
+            );
+
             foreach ($filesToDelete as $file) {
-                $this->info("Successfully deleted: {$file}");
+                $bar->setMessage($file, 'current_step');
+                $bar->advance();
             }
+
+            $bar->finish();
+            $this->info('Old files are deleted from CDN!');
         }
 
     }
@@ -105,7 +122,7 @@ class Sync extends Command
     private function filesToSync(array $filesOnCdn, array $localFiles): array
     {
         $array = array_filter($localFiles, function (SplFileInfo $localFile) use ($filesOnCdn) {
-            $localFilePathname = $localFile->getRelativePathname();
+            $localFilePathname = str_replace('\\', '/', $localFile->getRelativePathname());
             if (!in_array($localFilePathname, $filesOnCdn)) {
                 return true;
             }
@@ -118,7 +135,7 @@ class Sync extends Command
                 $this->filesystemManager
                     ->get($localFilePathname)
             );
-            $md5OfLocal = md5_file($localFile->getRealPath());
+            $md5OfLocal = md5_file(str_replace('\\', '/', $localFile->getRealPath()));
             if ($md5OfLocal != $md5OfCdn) {
                 return true;
             }
