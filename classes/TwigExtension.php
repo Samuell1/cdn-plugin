@@ -55,15 +55,43 @@ class TwigExtension
     private function readManifest($path)
     {
         $manifest = Cache::rememberForever('cdn:manifest', function () {
-            $themePath = Theme::getActiveTheme()->getPath();
-            $manifestPath = $themePath . config('cdn.manifestPath');
-            if (file_exists($manifestPath)) {
-                return json_decode(file_get_contents($manifestPath));
+            $theme = Theme::getActiveTheme();
+            $manifestPath = $theme->getPath() . config('cdn.manifestPath');
+            if (config('cdn.useHotreload') && !config('cdn.active')) {
+                return $this->getHotreloadManifest($theme->getDirName());
             } else {
-                throw new SystemException('Missing manifest.json file');
+                return $this->getLocalManifest($manifestPath);
             }
         });
 
         return $manifest->$path;
+    }
+
+    private function getHotreloadManifest($themeDir)
+    {
+        return json_decode($this->curl_get_contents(config('cdn.hotReloadUrl', 'http://localhost:8080').'/themes/' . $themeDir . config('cdn.manifestPath')));
+    }
+
+    private function getLocalManifest($manifestPath)
+    {
+        if (file_exists($manifestPath)) {
+            return json_decode(file_get_contents($manifestPath));
+        } else {
+            throw new SystemException('Missing manifest.json file');
+        }
+    }
+
+    private function curl_get_contents($url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
     }
 }

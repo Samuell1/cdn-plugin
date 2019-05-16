@@ -28,6 +28,7 @@ return [
   // webpack, laravel mix integration
   'useManifest' => true,
   'manifestPath' => '/assets/compiled/manifest.json',
+  'useHotreload' => true,
 
   'filesystem' => [
     'disk' => 'asset-cdn',
