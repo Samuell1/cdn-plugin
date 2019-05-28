@@ -60,7 +60,7 @@ return [
 Sync all assets but deletes old files that are on CDN.
 
 ```
-php artisan cdn:sync
+php artisan cdn:sync <theme>
 ```
 
 #### Push Assets
