@@ -15,10 +15,10 @@ class TwigExtension
      * @param  boolean $useManifest
      * @return string
      */
-    public function assetCdn($path, $useManifest = true): string
+    public function assetCdn($path): string
     {
         // Use manifest to determine path
-        if (config('cdn.useManifest') && $useManifest) {
+        if (config('cdn.useManifest')) {
             $outputPath = $this->readManifest(basename($path));
         } else {
             // If cdn is disabled return url from local active theme
