@@ -28,7 +28,6 @@ return [
   // webpack, laravel mix integration
   'useManifest' => true,
   'manifestPath' => '/assets/compiled/manifest.json',
-  'useHotreload' => true,
 
   'filesystem' => [
     'disk' => 'asset-cdn',
@@ -48,7 +47,7 @@ php artisan cdn:sync
 ```
 
 #### Push Assets
-Pushes assets but does not delete files on CDN.
+Pushes assets but does not delete old files on CDN.
 
 ```
 php artisan cdn:push
@@ -58,10 +57,10 @@ php artisan cdn:push
 Deletes all assets from CDN.
 
 ```
-php artisan cdn:empty
+php artisan cdn:clear
 ```
 
 ### Twig Functions
 
-- Replace `'path'|theme` with `asset_cdn('path')`.
+- Replace `'path'|theme` with `asset_cdn('path')` (It can read manifest.json file if options is set to true in config).
 - Replace any asset that is going out of asset theme directory with `cdn('path')`.
