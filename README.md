@@ -7,6 +7,7 @@ Push, sync, clear and serve assets to/from a CDN or use it for including manifes
 ```
 
 **With manifest integration enabled:**
+
 We define file name that is compiled from Webpack or LaravelMix and exists in `manifest.json` file.
 ```
 <link rel="stylesheet" href="{{ asset_cdn('app.css') }}">
