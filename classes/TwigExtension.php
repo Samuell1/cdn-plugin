@@ -4,6 +4,7 @@ use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Cache;
 use SystemException;
+use PhpImap\Exception;
 
 class TwigExtension
 {
@@ -55,15 +56,13 @@ class TwigExtension
     private function readManifest($path)
     {
         $manifest = Cache::rememberForever('cdn:manifest', function () {
-            $theme = Theme::getActiveTheme();
-            $manifestPath = $theme->getPath() . config('cdn.manifestPath');
+            $manifestPath = Theme::getActiveTheme()->getPath() . config('cdn.manifestPath');
             return $this->getLocalManifest($manifestPath);
         });
-
         if (isset($manifest->$path)) {
             return $manifest->$path;
         } else {
-            throw new SystemException('Missing '.$path.' file in manifest.json');
+            throw new SystemException('Missing ' . $path . ' file in manifest.json');
         }
     }
 
@@ -72,7 +71,7 @@ class TwigExtension
         if (file_exists($manifestPath)) {
             return json_decode(file_get_contents($manifestPath));
         } else {
-            throw new SystemException('Missing manifest.json file');
+            throw new SystemException('Missing manifest.json file in "' . $manifestPath . '" ');
         }
     }
 }
