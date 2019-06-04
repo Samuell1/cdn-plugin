@@ -21,7 +21,7 @@ class Sync extends Command
      */
     protected $description = 'Synchronizes assets to CDN';
 
-    protected $signature = 'cdn:push {theme} {--delete-old}';
+    protected $signature = 'cdn:sync {theme} {--delete-old}';
 
     private $filesystemManager;
 
@@ -75,6 +75,7 @@ class Sync extends Command
 
         // Delete old files
         if ($this->option('delete-old')) {
+            $this->info('\n Deleting old files from CDN:');
             $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
             if ($filesToDelete && $this->filesystemManager
                 ->delete($filesToDelete)) {
