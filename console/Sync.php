@@ -7,10 +7,10 @@ use Cms\Classes\Theme;
 use Illuminate\Http\File as FileIlluminate;
 use October\Rain\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Finder\SplFileInfo;
 
 class Sync extends Command
 {
+    use \Samuell\Cdn\Traits\FilesSync;
     /**
      * @var string The console command name.
      */
@@ -20,6 +20,8 @@ class Sync extends Command
      * @var string The console command description.
      */
     protected $description = 'Synchronizes assets to CDN';
+
+    protected $signature = 'cdn:push {theme} {--delete-old}';
 
     private $filesystemManager;
 
@@ -37,7 +39,6 @@ class Sync extends Command
 
         $filesOnCdn = $this->filesystemManager->allFiles();
         $localFiles = File::allFiles($assetsThemePath);
-        $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
         $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
         if (!$filesToSync) {
@@ -73,23 +74,26 @@ class Sync extends Command
 
 
         // Delete old files
-        if ($filesToDelete && $this->filesystemManager
-            ->delete($filesToDelete)) {
+        if ($this->option('delete-old')) {
+            $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
+            if ($filesToDelete && $this->filesystemManager
+                ->delete($filesToDelete)) {
 
-            $this->info('Deleting old files');
+                $this->info('Deleting old files');
 
-            $barDeleted = $this->output->createProgressBar(count($filesToDelete));
-            $barDeleted->setFormat(
-                "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
-            );
+                $barDeleted = $this->output->createProgressBar(count($filesToDelete));
+                $barDeleted->setFormat(
+                    "%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%\nThe current step is %current_step%\n"
+                );
 
-            foreach ($filesToDelete as $file) {
-                $bar->setMessage($file, 'current_step');
-                $bar->advance();
+                foreach ($filesToDelete as $file) {
+                    $bar->setMessage($file, 'current_step');
+                    $bar->advance();
+                }
+
+                $bar->finish();
+                $this->info('Old files are deleted from CDN!');
             }
-
-            $bar->finish();
-            $this->info('Old files are deleted from CDN!');
         }
 
     }
@@ -111,56 +115,8 @@ class Sync extends Command
      */
     protected function getOptions()
     {
-        return [];
-    }
-
-    /**
-     * @param string[] $filesOnCdn
-     * @param SplFileInfo[] $localFiles
-     * @return SplFileInfo[]
-     */
-    private function filesToSync(array $filesOnCdn, array $localFiles): array
-    {
-        $array = array_filter($localFiles, function (SplFileInfo $localFile) use ($filesOnCdn) {
-            $localFilePathname = str_replace('\\', '/', $localFile->getRelativePathname());
-            if (!in_array($localFilePathname, $filesOnCdn)) {
-                return true;
-            }
-            $filesizeOfCdn = $this->filesystemManager
-                ->size($localFilePathname);
-            if ($filesizeOfCdn != $localFile->getSize()) {
-                return true;
-            }
-            $md5OfCdn = md5(
-                $this->filesystemManager
-                    ->get($localFilePathname)
-            );
-            $md5OfLocal = md5_file(str_replace('\\', '/', $localFile->getRealPath()));
-            if ($md5OfLocal != $md5OfCdn) {
-                return true;
-            }
-            return false;
-        });
-        return array_values($array);
-    }
-    /**
-     * @param string[] $filesOnCdn
-     * @param SplFileInfo[] $localFiles
-     * @return string[]
-     */
-    private function filesToDelete(array $filesOnCdn, array $localFiles): array
-    {
-        $localFiles = $this->mapToPathname($localFiles);
-        $array = array_filter($filesOnCdn, function (string $fileOnCdn) use ($localFiles) {
-            return !in_array($fileOnCdn, $localFiles);
-        });
-        return array_values($array);
-    }
-
-    protected function mapToPathname(array $files): array
-    {
-        return array_map(function (SplFileInfo $file) {
-            return str_replace('\\', '/', $file->getRelativePathname());
-        }, $files);
+        return [
+            ['delete-old', null, InputOption::VALUE_NONE, 'Removes old files from CDN', null],
+        ];
     }
 }
