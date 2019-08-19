@@ -1,0 +1,17 @@
+{
+    "name": "samuell/cdn-plugin",
+    "type": "october-plugin",
+    "description": "Push, sync, clear and serve assets to/from a CDN or include manifest files from webpack or laravel-mix. ",
+    "license": "MIT",
+    "homepage": "https://github.com/Samuell1/cdn-plugin",
+    "keywords": ["cdn", "manifest", "sync", "octobercms"],
+    "authors": [
+        {
+            "name": "Samuell"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "composer/installers": "~1.0"
+    }
+}
