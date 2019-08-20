@@ -19,11 +19,11 @@ class TwigExtension
     public function assetCdn($path): string
     {
         // Use manifest to determine path
-        if (config('cdn.useManifest')) {
+        if (config('cdn.useManifest', false)) {
             $outputPath = $this->readManifest(basename($path));
         } else {
             // If cdn is disabled return url from local active theme
-            if (!config('cdn.active')) {
+            if (!config('cdn.active', false)) {
                 return (new Controller)->themeUrl($path);
             }
 
@@ -43,7 +43,7 @@ class TwigExtension
     public function cdn($path): string
     {
         // If cdn is disabled return url from local active theme
-        if (!config('cdn.active')) {
+        if (!config('cdn.active', false)) {
             return (new Controller)->themeUrl($path);
         }
 
