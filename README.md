@@ -68,14 +68,14 @@ php artisan cdn:sync {theme} {--delete-old}
 Pushes assets but does not delete old files on CDN.
 
 ```
-php artisan cdn:push <theme>
+php artisan cdn:push {theme}
 ```
 
 #### Delete all assets from CDN
 Deletes all assets from CDN.
 
 ```
-php artisan cdn:clear <theme>
+php artisan cdn:clear {theme}
 ```
 
 ### Twig Functions
