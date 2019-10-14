@@ -1,6 +1,8 @@
 # OctoberCMS CDN Plugin
 Push, sync, clear and serve assets to/from a CDN or use it for including manifest files from webpack or laravel-mix.
 
+https://octobercms.com/plugin/samuell-cdn
+
 ## Usage
 
 In your theme change asset links to use *asset_cdn* function. 
