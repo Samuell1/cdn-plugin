@@ -113,3 +113,6 @@ php artisan cdn:clear {theme}
 ### Twig Functions
 - Replace `'path'|theme` with `asset_cdn('path')` (It can read manifest.json file if option **useManifest** is set to true in config).
 - Replace any asset that is going out of asset theme directory or is not used in manifest with `cdn('path')`.
+
+
+*Inspired by AsssetCDN package for Laravel https://github.com/arubacao/asset-cdn*
