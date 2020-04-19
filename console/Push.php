@@ -5,8 +5,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Cms\Classes\Theme;
 use Illuminate\Http\File as FileIlluminate;
-use October\Rain\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Samuell\Cdn\Classes\Finder;
 
 class Push extends Command
 {
@@ -39,7 +39,7 @@ class Push extends Command
         $assetsThemePath = (new Theme)->getPath($this->argument('theme')) . $this->assetsFolder;
 
         $filesOnCdn = $this->filesystemManager->allFiles();
-        $localFiles = File::allFiles($assetsThemePath);
+        $localFiles = (new Finder($assetsThemePath))->getFiles();
         $filesToSync = $this->option('overwrite') ? $localFiles : $this->filesToSync($filesOnCdn, $localFiles);
 
         if (!$filesToSync) {
@@ -52,7 +52,6 @@ class Push extends Command
         );
 
         foreach ($filesToSync as $file) {
-
             $bar->setMessage($file->getRelativePathname(), 'current_step');
 
             $fileUploaded = $this->filesystemManager
