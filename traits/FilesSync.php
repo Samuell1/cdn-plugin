@@ -33,6 +33,7 @@ trait FilesSync
         });
         return array_values($array);
     }
+
     /**
      * @param string[] $filesOnCdn
      * @param SplFileInfo[] $localFiles
