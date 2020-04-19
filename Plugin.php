@@ -32,6 +32,7 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->registerConsoleCommand('cdn:sync', 'Samuell\Cdn\Console\Sync');
+        $this->registerConsoleCommand('cdn:push', 'Samuell\Cdn\Console\Push');
         $this->registerConsoleCommand('cdn:clear', 'Samuell\Cdn\Console\Clear');
     }
 
