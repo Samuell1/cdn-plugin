@@ -5,8 +5,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Cms\Classes\Theme;
 use Illuminate\Http\File as FileIlluminate;
-use October\Rain\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Samuell\Cdn\Classes\Finder;
 
 class Sync extends Command
 {
@@ -38,7 +38,7 @@ class Sync extends Command
         $assetsThemePath = (new Theme)->getPath($this->argument('theme')) . $this->assetsFolder;
 
         $filesOnCdn = $this->filesystemManager->allFiles();
-        $localFiles = File::allFiles($assetsThemePath);
+        $localFiles = (new Finder($assetsThemePath))->getFiles();
         $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
         if (!$filesToSync) {
