@@ -73,6 +73,40 @@ return [
     'disk' => 'asset-cdn',
     'options' => []
   ]
+  
+  // Files filter
+  'files' => [
+    'ignoreDotFiles' => true,
+    'ignoreVCS' => true,
+    'include' => [
+        'paths' => [
+            //
+        ],
+        'files' => [
+            //
+        ],
+        'extensions' => [
+            //
+        ],
+        'patterns' => [
+            //
+        ],
+    ],
+    'exclude' => [
+      'paths' => [
+        //
+      ],
+      'files' => [
+          //
+      ],
+      'extensions' => [
+          //
+      ],
+      'patterns' => [
+          //
+      ],
+    ],
+  ],
 ];
 ```
 
