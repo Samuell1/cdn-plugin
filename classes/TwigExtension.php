@@ -54,15 +54,25 @@ class TwigExtension
 
     private function readManifest($path)
     {
-        $manifest = Cache::rememberForever('cdn:manifest', function () {
-            $manifestPath = Theme::getActiveTheme()->getPath() . config('cdn.manifestPath');
-            return $this->getLocalManifest($manifestPath);
-        });
+        $manifest = $this->getManifestFileCached();
+
         if (isset($manifest->$path)) {
             return $manifest->$path;
         } else {
             throw new SystemException('Missing ' . $path . ' file in manifest.json');
         }
+    }
+
+    private function getManifestFileCached()
+    {
+        // Prevent caching web in debug mode
+        if (config('app.debug')) {
+            return $this->getLocalManifest(Theme::getActiveTheme()->getPath() . config('cdn.manifestPath'));
+        }
+
+        return Cache::rememberForever('cdn:manifest', function () {
+            return $this->getLocalManifest(Theme::getActiveTheme()->getPath() . config('cdn.manifestPath'));
+        });
     }
 
     private function getLocalManifest($manifestPath)
