@@ -2,7 +2,7 @@
 
 return [
   // CDN integration
-  'active' => false,
+  'active' => env('CDN_MANIFEST_ACTIVE', false),
   'url' => 'https://cdn.mydomain.com/',
   'assetsFolder' => '/assets/',
 
