@@ -35,6 +35,8 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('cdn:sync', 'Samuell\Cdn\Console\Sync');
         $this->registerConsoleCommand('cdn:push', 'Samuell\Cdn\Console\Push');
         $this->registerConsoleCommand('cdn:clear', 'Samuell\Cdn\Console\Clear');
+
+        $this->registerConsoleCommand('cdn:clear-manifest-cache', 'Samuell\Cdn\Console\ClearManifestCache');
     }
 
     /**
