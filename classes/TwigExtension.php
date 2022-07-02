@@ -1,9 +1,11 @@
-<?php namespace Samuell\Cdn\Classes;
+<?php
 
-use Cms\Classes\Controller;
-use Cms\Classes\Theme;
+namespace Samuell\Cdn\Classes;
+
 use Cache;
 use SystemException;
+use Cms\Classes\Theme;
+use Cms\Classes\Controller;
 
 class TwigExtension
 {

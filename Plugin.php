@@ -1,6 +1,7 @@
-<?php namespace Samuell\Cdn;
+<?php
 
-use Backend;
+namespace Samuell\Cdn;
+
 use System\Classes\PluginBase;
 use Samuell\Cdn\Classes\TwigExtension;
 
@@ -43,7 +44,6 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-
     }
 
     /**

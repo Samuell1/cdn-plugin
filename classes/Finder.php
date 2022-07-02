@@ -1,4 +1,6 @@
-<?php namespace Samuell\Cdn\Classes;
+<?php
+
+namespace Samuell\Cdn\Classes;
 
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Finder\Finder as SymfonyFinder;

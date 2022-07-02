@@ -1,4 +1,6 @@
-<?php namespace Samuell\Cdn\Classes;
+<?php
+
+namespace Samuell\Cdn\Classes;
 
 class ConfigParser
 {
@@ -59,7 +61,7 @@ class ConfigParser
     {
         return array_map(
             function ($path) {
-                return $this->cleanPath($path).'/';
+                return $this->cleanPath($path) . '/';
             },
             $this->config[$type]['paths']
         );
@@ -79,7 +81,7 @@ class ConfigParser
     {
         return array_map(
             function ($extension) {
-                return '*'.$this->start($extension, '.');
+                return '*' . $this->start($extension, '.');
             },
             $this->config[$type]['extensions']
         );
@@ -107,6 +109,6 @@ class ConfigParser
     {
         $quoted = preg_quote($prefix, '/');
 
-        return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
+        return $prefix . preg_replace('/^(?:' . $quoted . ')+/u', '', $value);
     }
 }

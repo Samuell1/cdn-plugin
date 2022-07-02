@@ -1,12 +1,14 @@
-<?php namespace Samuell\Cdn\Console;
+<?php
 
+namespace Samuell\Cdn\Console;
+
+use Cms\Classes\Theme;
 use Illuminate\Console\Command;
+use Samuell\Cdn\Classes\Finder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File as FileIlluminate;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Cms\Classes\Theme;
-use Illuminate\Http\File as FileIlluminate;
-use Illuminate\Support\Facades\Storage;
-use Samuell\Cdn\Classes\Finder;
 
 class Sync extends Command
 {
@@ -24,6 +26,10 @@ class Sync extends Command
     protected $signature = 'cdn:sync {theme} {--delete-old}';
 
     private $filesystemManager;
+
+    private $filesystem;
+
+    private $assetsFolder;
 
     /**
      * Execute the console command.
@@ -77,8 +83,10 @@ class Sync extends Command
         if ($this->option('delete-old')) {
             $this->info('\n Deleting old files from CDN:');
             $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
-            if ($filesToDelete && $this->filesystemManager
-                ->delete($filesToDelete)) {
+            if (
+                $filesToDelete && $this->filesystemManager
+                ->delete($filesToDelete)
+            ) {
 
                 $this->info('Deleting old files');
 
@@ -96,7 +104,6 @@ class Sync extends Command
                 $this->info('Old files are deleted from CDN!');
             }
         }
-
     }
 
     /**

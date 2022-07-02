@@ -1,4 +1,6 @@
-<?php namespace Samuell\Cdn\Traits;
+<?php
+
+namespace Samuell\Cdn\Traits;
 
 use Symfony\Component\Finder\SplFileInfo;
 

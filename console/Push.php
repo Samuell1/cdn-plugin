@@ -1,12 +1,14 @@
-<?php namespace Samuell\Cdn\Console;
+<?php
 
+namespace Samuell\Cdn\Console;
+
+use Cms\Classes\Theme;
 use Illuminate\Console\Command;
+use Samuell\Cdn\Classes\Finder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File as FileIlluminate;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Cms\Classes\Theme;
-use Illuminate\Http\File as FileIlluminate;
-use Illuminate\Support\Facades\Storage;
-use Samuell\Cdn\Classes\Finder;
 
 class Push extends Command
 {
@@ -25,6 +27,10 @@ class Push extends Command
     protected $signature = 'cdn:push {theme} {--overwrite}';
 
     private $filesystemManager;
+
+    private $filesystem;
+
+    private $assetsFolder;
 
     /**
      * Execute the console command.

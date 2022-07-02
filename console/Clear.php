@@ -1,8 +1,8 @@
-<?php namespace Samuell\Cdn\Console;
+<?php
+
+namespace Samuell\Cdn\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Support\Facades\Storage;
 
 class Clear extends Command
@@ -24,9 +24,9 @@ class Clear extends Command
     public function handle()
     {
         $filesystemManager = Storage::disk(config('cdn.filesystem.disk'));
-        
+
         $filesOnCdn = $filesystemManager->allFiles();
-        
+
         if (!$filesOnCdn) {
             return $this->error('CDN storage is already empty.');
         }
