@@ -19,7 +19,7 @@ class Clear extends Command
 
     /**
      * Execute the console command.
-     * @return void
+     * @return mixed
      */
     public function handle()
     {
@@ -28,7 +28,8 @@ class Clear extends Command
         $filesOnCdn = $filesystemManager->allFiles();
 
         if (!$filesOnCdn) {
-            return $this->error('CDN storage is already empty.');
+            $this->error('CDN storage is already empty.');
+            return;
         }
 
         $bar = $this->output->createProgressBar(count($filesOnCdn));

@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File as FileIlluminate;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Samuell\Cdn\Traits\FilesSync;
 
 class Push extends Command
 {
-    use \Samuell\Cdn\Traits\FilesSync;
+    use FilesSync;
 
     /**
      * @var string The console command name.
@@ -34,7 +35,7 @@ class Push extends Command
 
     /**
      * Execute the console command.
-     * @return void
+     * @return mixed
      */
     public function handle()
     {
@@ -49,7 +50,8 @@ class Push extends Command
         $filesToSync = $this->option('overwrite') ? $localFiles : $this->filesToSync($filesOnCdn, $localFiles);
 
         if (!$filesToSync) {
-            return $this->info('No files to push to CDN. (use "--overwrite" option to replace already existing files)');
+            $this->info('No files to push to CDN. (use "--overwrite" option to replace already existing files)');
+            return;
         }
 
         $bar = $this->output->createProgressBar(count($filesToSync));

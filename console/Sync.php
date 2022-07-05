@@ -33,7 +33,7 @@ class Sync extends Command
 
     /**
      * Execute the console command.
-     * @return void
+     * @return mixed
      */
     public function handle()
     {
@@ -48,7 +48,8 @@ class Sync extends Command
         $filesToSync = $this->filesToSync($filesOnCdn, $localFiles);
 
         if (!$filesToSync) {
-            return $this->info('Files on CDN are equal to local files.');
+            $this->info('Files on CDN are equal to local files.');
+            return;
         }
 
         $bar = $this->output->createProgressBar(count($filesToSync));
