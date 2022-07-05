@@ -8,7 +8,7 @@ https://octobercms.com/plugin/samuell-cdn
 In your theme change asset links to use *asset_cdn* function. 
 
 *Example:*
-```
+```html
 <link rel="stylesheet" href="{{ asset_cdn('assets/css/app.css') }}">
 <script src="{{ asset_cdn('assets/js/app.js') }}"></script>
 ```
@@ -18,12 +18,12 @@ In your theme change asset links to use *asset_cdn* function.
 **With manifest integration enabled:**
 
 We define file name that is compiled from Webpack or LaravelMix and exists in `manifest.json` file. Don't forget to enabled manifest integration and define correct `manifest.json` path in config file.
-```
+```html
 <link rel="stylesheet" href="{{ asset_cdn('app.css') }}">
 ```
 
 Getting assets from cdn that are not in `manifest.json` file use `cdn` function with full path to file:
-```
+```html
 <link rel="stylesheet" href="{{ cdn('assets/css/app.css') }}">
 ```
 
@@ -38,7 +38,7 @@ If is your plan to use CDN, you can use this config. If not you can skip this st
 *Example is for AWS S3 with Cloudfront.*
 
 **config/filesystems.php**
-```
+```php
 'asset-cdn' => [
     'driver' => 's3',
     'key'    => env('S3_KEY'),
@@ -56,7 +56,7 @@ Create `cdn.php` file in **config** folder to configure cdn plugin, this allows 
 
 **config/cdn.php**
 
-```
+```php
 return [
 
   // CDN integration
@@ -116,7 +116,7 @@ Filesystem allows to define custom options.
 *The following example is recommended for AWS S3.*
 
 **cdn.php > filesystem.options**
-```
+```php
     'options' => [
        'ACL' => 'public-read',
        'CacheControl' => 'max-age=31536000, public'
