@@ -4,15 +4,16 @@ namespace Samuell\Cdn\Console;
 
 use Cms\Classes\Theme;
 use Illuminate\Console\Command;
-use Samuell\Cdn\Classes\Finder;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File as FileIlluminate;
-use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Support\Facades\Storage;
+use Samuell\Cdn\Classes\Finder;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class Sync extends Command
 {
     use \Samuell\Cdn\Traits\FilesSync;
+
     /**
      * @var string The console command name.
      */
@@ -86,7 +87,7 @@ class Sync extends Command
             $filesToDelete = $this->filesToDelete($filesOnCdn, $localFiles);
             if (
                 $filesToDelete && $this->filesystemManager
-                ->delete($filesToDelete)
+                    ->delete($filesToDelete)
             ) {
 
                 $this->info('Deleting old files');

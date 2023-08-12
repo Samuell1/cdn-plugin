@@ -2,8 +2,8 @@
 
 namespace Samuell\Cdn;
 
-use System\Classes\PluginBase;
 use Samuell\Cdn\Classes\TwigExtension;
+use System\Classes\PluginBase;
 
 /**
  * Cdn Plugin Information File
@@ -18,19 +18,14 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Cdn',
+            'name' => 'Cdn',
             'description' => 'Sync theme assets with cdn.',
-            'author'      => 'Samuell',
-            'icon'        => 'icon-refresh'
+            'author' => 'Samuell',
+            'icon' => 'icon-refresh'
         ];
     }
 
-    /**
-     * Register method, called when the plugin is first registered.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->registerConsoleCommand('cdn:sync', 'Samuell\Cdn\Console\Sync');
         $this->registerConsoleCommand('cdn:push', 'Samuell\Cdn\Console\Push');
@@ -39,21 +34,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('cdn:clear-manifest-cache', 'Samuell\Cdn\Console\ClearManifestCache');
     }
 
-    /**
-     * Boot method, called right before the request route.
-     *
-     * @return array
-     */
-    public function boot()
-    {
-    }
-
-    /**
-     * Boot method, called right before the request route.
-     *
-     * @return array
-     */
-    public function registerMarkupTags()
+    public function registerMarkupTags(): array
     {
         return [
             'functions' => [

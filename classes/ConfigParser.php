@@ -101,8 +101,8 @@ class ConfigParser
     /**
      * Begin a string with a single instance of a given value.
      *
-     * @param  string  $value
-     * @param  string  $prefix
+     * @param string $value
+     * @param string $prefix
      * @return string
      */
     private function start($value, $prefix)

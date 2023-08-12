@@ -4,12 +4,12 @@ namespace Samuell\Cdn\Console;
 
 use Cms\Classes\Theme;
 use Illuminate\Console\Command;
-use Samuell\Cdn\Classes\Finder;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File as FileIlluminate;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Facades\Storage;
+use Samuell\Cdn\Classes\Finder;
 use Samuell\Cdn\Traits\FilesSync;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class Push extends Command
 {

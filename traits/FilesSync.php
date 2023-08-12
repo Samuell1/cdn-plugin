@@ -2,15 +2,11 @@
 
 namespace Samuell\Cdn\Traits;
 
+use SplFileInfo;
 use Symfony\Component\Finder\SplFileInfo;
 
 trait FilesSync
 {
-    /**
-     * @param string[] $filesOnCdn
-     * @param SplFileInfo[] $localFiles
-     * @return SplFileInfo[]
-     */
     private function filesToSync(array $filesOnCdn, array $localFiles): array
     {
         $array = array_filter($localFiles, function (SplFileInfo $localFile) use ($filesOnCdn) {
@@ -33,20 +29,17 @@ trait FilesSync
             }
             return false;
         });
+
         return array_values($array);
     }
 
-    /**
-     * @param string[] $filesOnCdn
-     * @param SplFileInfo[] $localFiles
-     * @return string[]
-     */
     private function filesToDelete(array $filesOnCdn, array $localFiles): array
     {
         $localFiles = $this->mapToPathname($localFiles);
         $array = array_filter($filesOnCdn, function (string $fileOnCdn) use ($localFiles) {
             return !in_array($fileOnCdn, $localFiles);
         });
+
         return array_values($array);
     }
 

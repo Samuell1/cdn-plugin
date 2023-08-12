@@ -7,20 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 class Clear extends Command
 {
-    /**
-     * @var string The console command name.
-     */
     protected $name = 'cdn:clear';
 
-    /**
-     * @var string The console command description.
-     */
     protected $description = 'Deletes assets on CDN';
 
-    /**
-     * Execute the console command.
-     * @return mixed
-     */
     public function handle()
     {
         $filesystemManager = Storage::disk(config('cdn.filesystem.disk'));
@@ -46,23 +36,5 @@ class Clear extends Command
 
         $bar->finish();
         $this->info('CDN storage cleared!');
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [];
     }
 }

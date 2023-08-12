@@ -3,9 +3,9 @@
 namespace Samuell\Cdn\Classes;
 
 use Cache;
-use SystemException;
-use Cms\Classes\Theme;
 use Cms\Classes\Controller;
+use Cms\Classes\Theme;
+use SystemException;
 
 class TwigExtension
 {
@@ -13,8 +13,8 @@ class TwigExtension
     /**
      * Get asset path for cdn.
      *
-     * @param  string  $path
-     * @param  boolean $useManifest
+     * @param string $path
+     * @param boolean $useManifest
      * @return string
      */
     public function assetCdn($path): string
@@ -38,7 +38,7 @@ class TwigExtension
     /**
      * Get path for cdn.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
     public function cdn($path): string
