@@ -7,10 +7,7 @@ class ConfigParser
     const INCLUDE = 'include';
     const EXCLUDE = 'exclude';
 
-    /**
-     * @var array
-     */
-    private $config;
+    private array $config;
 
     public function __construct()
     {
@@ -89,9 +86,6 @@ class ConfigParser
 
     /**
      * Remove any extra slashes '/' from the path.
-     *
-     * @param string $path
-     * @return string
      */
     private function cleanPath(string $path): string
     {
@@ -100,12 +94,8 @@ class ConfigParser
 
     /**
      * Begin a string with a single instance of a given value.
-     *
-     * @param string $value
-     * @param string $prefix
-     * @return string
      */
-    private function start($value, $prefix)
+    private function start(string $value, string $prefix): string
     {
         $quoted = preg_quote($prefix, '/');
 

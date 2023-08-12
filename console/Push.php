@@ -15,14 +15,8 @@ class Push extends Command
 {
     use FilesSync;
 
-    /**
-     * @var string The console command name.
-     */
     protected $name = 'cdn:push';
 
-    /**
-     * @var string The console command description.
-     */
     protected $description = 'Push assets on CDN';
 
     protected $signature = 'cdn:push {theme} {--overwrite}';
@@ -33,10 +27,6 @@ class Push extends Command
 
     private $assetsFolder;
 
-    /**
-     * Execute the console command.
-     * @return mixed
-     */
     public function handle()
     {
         $this->filesystem = config('cdn.filesystem.disk');
@@ -81,22 +71,14 @@ class Push extends Command
         $this->info('Files succesfuly uploaded to CDN!');
     }
 
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['theme', InputArgument::REQUIRED, 'Please specifiy theme name.']
         ];
     }
 
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['overwrite', null, InputOption::VALUE_NONE, 'Overwrite files even when exists', null],

@@ -14,14 +14,8 @@ class Sync extends Command
 {
     use \Samuell\Cdn\Traits\FilesSync;
 
-    /**
-     * @var string The console command name.
-     */
     protected $name = 'cdn:sync';
 
-    /**
-     * @var string The console command description.
-     */
     protected $description = 'Synchronizes assets to CDN';
 
     protected $signature = 'cdn:sync {theme} {--delete-old}';
@@ -32,10 +26,6 @@ class Sync extends Command
 
     private $assetsFolder;
 
-    /**
-     * Execute the console command.
-     * @return mixed
-     */
     public function handle()
     {
         $this->filesystem = config('cdn.filesystem.disk');
@@ -59,7 +49,6 @@ class Sync extends Command
         );
 
         foreach ($filesToSync as $file) {
-
             $bar->setMessage($file->getRelativePathname(), 'current_step');
 
             $fileUploaded = $this->filesystemManager
@@ -89,7 +78,6 @@ class Sync extends Command
                 $filesToDelete && $this->filesystemManager
                     ->delete($filesToDelete)
             ) {
-
                 $this->info('Deleting old files');
 
                 $barDeleted = $this->output->createProgressBar(count($filesToDelete));
@@ -108,22 +96,14 @@ class Sync extends Command
         }
     }
 
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['theme', InputArgument::REQUIRED, 'Please specifiy theme name.']
         ];
     }
 
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['delete-old', null, InputOption::VALUE_NONE, 'Removes old files from CDN', null],
