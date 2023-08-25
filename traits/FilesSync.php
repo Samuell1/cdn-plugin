@@ -2,7 +2,6 @@
 
 namespace Samuell\Cdn\Traits;
 
-use SplFileInfo;
 use Symfony\Component\Finder\SplFileInfo;
 
 trait FilesSync
